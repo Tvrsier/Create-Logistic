@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TET",
+    " B "
+  ],
+  "key": {
+    "T": {
+      "item": "create:transmitter"
+    },
+    "E": {
+      "item": "create:electron_tube"
+    },
+    "B": {
+      "item": "create:brass_casing"
+    }
+  },
+  "result": {
+    "id": "create_logistic:toggle_link",
+    "count": 1
+  }
+}

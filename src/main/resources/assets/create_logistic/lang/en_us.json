@@ -1,0 +1,7 @@
+{
+  "itemGroup.create_logistic": "Create Logistic",
+  "block.create_logistic.logistic_controller": "Logistic Controller",
+  "item.create_logistic.logistic_controller": "Logistic Controller",
+  "block.create_logistic.toggle_link": "Redstone Toggle Link",
+  "item.create_logistic.toggle_link": "Redstone Toggle Link"
+}
