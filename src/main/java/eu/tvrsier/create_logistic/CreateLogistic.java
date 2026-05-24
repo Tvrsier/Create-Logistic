@@ -2,6 +2,7 @@ package eu.tvrsier.create_logistic;
 
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
+import eu.tvrsier.create_logistic.command.CreateLogisticCommands;
 import eu.tvrsier.create_logistic.registry.BlockEntityRegistry;
 import eu.tvrsier.create_logistic.registry.BlockRegistry;
 import eu.tvrsier.create_logistic.registry.ItemRegistry;
@@ -24,6 +25,7 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.slf4j.Logger;
@@ -109,6 +111,9 @@ import org.slf4j.Logger;
                     BlockEntityRegistry.TOGGLE_LINK.get(),
                     SmartBlockEntityRenderer::new
             );
+        }
+        @SubscribeEvent public static void onRegisterCommands(RegisterCommandsEvent event) {
+            CreateLogisticCommands.register(event.getDispatcher());
         }
     }
 }

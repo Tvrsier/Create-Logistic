@@ -22,7 +22,6 @@ public final class PhysicsContraptionDetector {
         SubLevel subLevel = Sable.HELPER.getContaining(level, pos);
 
         if(!(subLevel instanceof ServerSubLevel serverSubLevel)) {
-            LOGGER.debug("Physics contraption detector: subLevel is not a server sub level");
             return PhysicsContraptionStatus.none();
         }
 
@@ -31,8 +30,6 @@ public final class PhysicsContraptionDetector {
         if(serverSubLevel instanceof PrimaryAssemblerExtension extension) {
             primaryAssemblerPos = extension.simulated$getPrimaryAssembler();
         }
-
-        LOGGER.info("Physics contraption detected at {}: primary assembler position: {}", pos, primaryAssemblerPos);
 
         return PhysicsContraptionStatus.detected(serverSubLevel, primaryAssemblerPos);
     }

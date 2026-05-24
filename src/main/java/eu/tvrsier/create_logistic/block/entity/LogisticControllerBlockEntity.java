@@ -1,6 +1,9 @@
 package eu.tvrsier.create_logistic.block.entity;
 
 import com.mojang.logging.LogUtils;
+import eu.tvrsier.create_logistic.logistic.vehicle.LogisticVehicleContext;
+import eu.tvrsier.create_logistic.logistic.vehicle.LogisticVehicleIdFactory;
+import eu.tvrsier.create_logistic.logistic.vehicle.LogisticVehicleRegistry;
 import eu.tvrsier.create_logistic.physics.PhysicsContraptionDetector;
 import eu.tvrsier.create_logistic.physics.PhysicsContraptionStatus;
 import eu.tvrsier.create_logistic.redstone.ControllerTransmitter;
@@ -16,9 +19,15 @@ import org.slf4j.Logger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 public class LogisticControllerBlockEntity extends BlockEntity {
     private final List<ControllerTransmitter> activeTransmitters = new ArrayList<>();
+    private LogisticVehicleContext vehicleContext;
+    private int vehicleDetectionCooldown = 0;
+    private int vehicleDetectionAttempts = 0;
+
+    private static final int MAX_VEHICLE_DETECTION_ATTEMPTS = 10;
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
@@ -46,6 +55,54 @@ public class LogisticControllerBlockEntity extends BlockEntity {
     }
 
     public void tickServer() {
+        tickTransmitters();
+    }
+
+    private void registerVehicleIfPresent() {
+        if (vehicleContext != null) return;
+        if (!(level instanceof ServerLevel serverLevel)) return;
+
+        PhysicsContraptionStatus status =
+                PhysicsContraptionDetector.detect(serverLevel, worldPosition);
+
+        if (!status.detected()) return;
+
+        UUID vehicleId = LogisticVehicleIdFactory.create(serverLevel, status, worldPosition);
+        LOGGER.info(
+                "Vehicle registration debug: controllerPos={}, assemblerPos={}, plotPos={}, subLevel={}, vehicleId={}",
+                worldPosition,
+                status.primaryAssemblerPos(),
+                status.subLevel().getPlot().plotPos,
+                status.subLevel(),
+                vehicleId
+        );
+        if (LogisticVehicleRegistry.isRegistered(vehicleId)) {
+           LOGGER.warn("Cannot register Logistic Controller at {}: vehicle {} already has a controller",
+                   worldPosition, vehicleId);
+           return;
+        }
+
+        vehicleContext = new LogisticVehicleContext(
+                vehicleId,
+                serverLevel,
+                worldPosition,
+                status
+        );
+
+        LogisticVehicleRegistry.register(vehicleContext);
+
+        LOGGER.info(
+                "Logistic Vehicle registered: id={}, controller={}, assemblerPos={} level={}",
+                vehicleContext.vehicleId(),
+                vehicleContext.controllerPos(),
+                vehicleContext.status().primaryAssemblerPos(),
+                vehicleContext.level().dimension().location()
+        );
+
+        setChanged();
+    }
+
+    public void tickTransmitters() {
         Iterator<ControllerTransmitter> iterator = activeTransmitters.iterator();
 
         while (iterator.hasNext()) {
@@ -57,5 +114,58 @@ public class LogisticControllerBlockEntity extends BlockEntity {
                 iterator.remove();
             }
         }
+    }
+
+    public void tickVehicleRegistrationFallback() {
+        if (vehicleContext != null) return;
+        if (vehicleDetectionAttempts >= MAX_VEHICLE_DETECTION_ATTEMPTS) return;
+
+        if (--vehicleDetectionCooldown > 0) return;
+
+        vehicleDetectionCooldown = 20;
+
+        vehicleDetectionAttempts++;
+        registerVehicleIfPresent();
+    }
+
+    public LogisticVehicleContext getVehicleContext() {
+        return vehicleContext;
+    }
+
+    @Override
+    public void setRemoved() {
+        if (vehicleContext != null) {
+            LOGGER.info(
+                    "Logistic Controller removed from physics contraption at: {}",
+                    worldPosition
+            );
+
+            LogisticVehicleRegistry.unregister(vehicleContext.vehicleId());
+            vehicleContext = null;
+        }
+
+        super.setRemoved();
+    }
+
+    @Override
+    public void onChunkUnloaded() {
+        if (vehicleContext != null) {
+            LOGGER.info(
+                    "Logistic Controller chunk unloaded, unregistering vehicle: {}",
+                    vehicleContext.vehicleId()
+            );
+
+            LogisticVehicleRegistry.unregister(vehicleContext.vehicleId());
+            vehicleContext = null;
+        }
+
+        super.onChunkUnloaded();
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+
+        if (level != null && !level.isClientSide) registerVehicleIfPresent();
     }
 }
