@@ -2,13 +2,15 @@ package eu.tvrsier.create_logistic.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import eu.tvrsier.create_logistic.block.entity.LogisticControllerBlockEntity;
+import eu.tvrsier.create_logistic.logistic.inventory.LogisticInventoryScanner;
 import eu.tvrsier.create_logistic.logistic.vehicle.LogisticVehicleContext;
 import eu.tvrsier.create_logistic.logistic.vehicle.LogisticVehicleRegistry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.items.IItemHandler;
+
+import java.util.List;
 
 public class CreateLogisticCommands {
 
@@ -21,6 +23,9 @@ public class CreateLogisticCommands {
                         .then(Commands.literal("vehicles")
                                 .executes(context ->
                                         printVehicles(context.getSource())))
+                        .then(Commands.literal("inventories")
+                                .executes(context ->
+                                        getInventoryInVehicle(context.getSource())))
         );
     }
 
@@ -49,5 +54,24 @@ public class CreateLogisticCommands {
         }
 
         return vehicles.size();
+    }
+
+    private static int getInventoryInVehicle(CommandSourceStack source) {
+        int found = 0;
+        var vehicles = LogisticVehicleRegistry.getVehicles();
+        if (vehicles.isEmpty()) {
+            source.sendSuccess(
+                    () -> Component.literal("No Logistic Vehicles detected."),
+                    false
+            );
+        }
+
+        for (LogisticVehicleContext vehicle : vehicles) {
+            List<IItemHandler> inventories = LogisticInventoryScanner.scan(vehicle);
+            if (!inventories.isEmpty()) found++;
+            source.sendSuccess(() -> Component.literal("Inventories: " + inventories.size()), false);
+        }
+
+        return found;
     }
 }

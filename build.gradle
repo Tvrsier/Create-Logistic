@@ -39,6 +39,21 @@ repositories {
         }
     }
 
+    maven {
+        name = "Foundry"
+        url = "https://maven.fabricmc.net/"
+    }
+
+    maven {
+        name = "Terraformers"
+        url = "https://maven.terraformersmc.com/releases/"
+    }
+
+    maven {
+        name = "Veil"
+        url = "https://maven.veilmc.com/releases"
+    }
+
 
 }
 
@@ -68,6 +83,7 @@ neoForge {
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            systemProperty 'flywheel.backend', 'OFF'
         }
 
         server {
@@ -170,6 +186,7 @@ dependencies {
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
     runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
     runtimeOnly files("libs/nbtviewer-${nbt_viewer_version}-neoforge.jar")
+    runtimeOnly "foundry.veil:veil-common-${minecraft_version}:4.1.1"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
