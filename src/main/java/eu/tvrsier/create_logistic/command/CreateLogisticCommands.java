@@ -7,10 +7,12 @@ import eu.tvrsier.create_logistic.logistic.vehicle.LogisticVehicleContext;
 import eu.tvrsier.create_logistic.logistic.vehicle.LogisticVehicleRegistry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.items.IItemHandler;
 
 import java.util.List;
+import java.util.Map;
 
 public class CreateLogisticCommands {
 
@@ -67,7 +69,7 @@ public class CreateLogisticCommands {
         }
 
         for (LogisticVehicleContext vehicle : vehicles) {
-            List<IItemHandler> inventories = LogisticInventoryScanner.scan(vehicle);
+            Map<BlockPos, IItemHandler> inventories = LogisticInventoryScanner.scanChunk(vehicle);
             if (!inventories.isEmpty()) found++;
             source.sendSuccess(() -> Component.literal("Inventories: " + inventories.size()), false);
         }

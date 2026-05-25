@@ -1,6 +1,8 @@
 package eu.tvrsier.create_logistic.block.entity;
 
 import com.mojang.logging.LogUtils;
+import eu.tvrsier.create_logistic.logistic.inventory.LogisticInventoryScanner;
+import eu.tvrsier.create_logistic.logistic.inventory.LogisticVehicleInventoryState;
 import eu.tvrsier.create_logistic.logistic.vehicle.LogisticVehicleContext;
 import eu.tvrsier.create_logistic.logistic.vehicle.LogisticVehicleIdFactory;
 import eu.tvrsier.create_logistic.logistic.vehicle.LogisticVehicleRegistry;
@@ -14,12 +16,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.slf4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class LogisticControllerBlockEntity extends BlockEntity {
     private final List<ControllerTransmitter> activeTransmitters = new ArrayList<>();
@@ -86,17 +86,21 @@ public class LogisticControllerBlockEntity extends BlockEntity {
                 vehicleId,
                 serverLevel,
                 worldPosition,
-                status
+                status,
+                new LogisticVehicleInventoryState()
         );
 
+        Map<BlockPos, IItemHandler> inventories = LogisticInventoryScanner.scanChunk(vehicleContext);
+        vehicleContext.inventoryState().replaceAll(inventories);
         LogisticVehicleRegistry.register(vehicleContext);
 
         LOGGER.info(
-                "Logistic Vehicle registered: id={}, controller={}, assemblerPos={} level={}",
+                "Logistic Vehicle registered: id={}, controller={}, assemblerPos={} level={}, inventories={}",
                 vehicleContext.vehicleId(),
                 vehicleContext.controllerPos(),
                 vehicleContext.status().primaryAssemblerPos(),
-                vehicleContext.level().dimension().location()
+                vehicleContext.level().dimension().location(),
+                vehicleContext.inventoryState().inventoryCounter()
         );
 
         setChanged();
