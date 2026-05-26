@@ -90,19 +90,20 @@ public class LogisticControllerBlockEntity extends BlockEntity {
                 new LogisticVehicleInventoryState()
         );
 
-        Map<BlockPos, IItemHandler> inventories = LogisticInventoryScanner.scanChunk(vehicleContext);
+        Map<BlockPos, LogisticVehicleInventoryState.LogisticInventoryRef> inventories =
+                LogisticInventoryScanner.scanChunk(vehicleContext);
         vehicleContext.inventoryState().replaceAll(inventories);
         LogisticVehicleRegistry.register(vehicleContext);
 
         LOGGER.info(
-                "Logistic Vehicle registered: id={}, controller={}, assemblerPos={} level={}, inventories={}",
+                "Logistic Vehicle registered: id={}, controller={}, assemblerPos={} level={}, inventories={}, totalSlots={}",
                 vehicleContext.vehicleId(),
                 vehicleContext.controllerPos(),
                 vehicleContext.status().primaryAssemblerPos(),
                 vehicleContext.level().dimension().location(),
-                vehicleContext.inventoryState().inventoryCounter()
+                vehicleContext.inventoryState().inventoryCounter(),
+                vehicleContext.inventoryState().totalSlots()
         );
-
         setChanged();
     }
 

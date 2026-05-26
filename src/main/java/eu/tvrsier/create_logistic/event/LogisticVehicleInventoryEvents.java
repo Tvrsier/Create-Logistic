@@ -56,9 +56,17 @@ public final class LogisticVehicleInventoryEvents {
             );
 
             if (handler != null) {
-                context.vehicle.inventoryState().add(context.pos(), handler);
-                LOGGER.info("Found new inventory at {} for vehicle {}. Total inventories: {}",
-                        context.pos(), context.vehicle.vehicleId(), context.vehicle.inventoryState().inventoryCounter());
+                var state = context.level().getBlockState(context.pos());
+
+                context.vehicle.inventoryState().add(context.pos(), state, handler);
+                LOGGER.info(
+                        "Found new inventory at {} [{} slots] for vehicle {}. Total inventories: {}, total slots: {}",
+                        context.pos(),
+                        handler.getSlots(),
+                        context.vehicle.vehicleId(),
+                        context.vehicle.inventoryState().inventoryCounter(),
+                        context.vehicle.inventoryState().totalSlots()
+                );
             }
         });
     }
@@ -67,12 +75,15 @@ public final class LogisticVehicleInventoryEvents {
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
         resolve(event).ifPresent(context -> {
             boolean removed = context.vehicle.inventoryState().remove(context.pos());
-            if (removed) LOGGER.info(
-                    "Removed inventory at {} for vehicle {}. Remaining inventories: {}",
-                    context.pos(),
-                    context.vehicle.vehicleId(),
-                    context.vehicle.inventoryState().inventoryCounter()
-            );
+            if (removed) {
+                LOGGER.info(
+                        "Removed inventory at {} for vehicle {}. Remaining inventories: {}, total slots: {}",
+                        context.pos(),
+                        context.vehicle.vehicleId(),
+                        context.vehicle.inventoryState().inventoryCounter(),
+                        context.vehicle.inventoryState().totalSlots()
+                );
+            }
         });
     }
 }

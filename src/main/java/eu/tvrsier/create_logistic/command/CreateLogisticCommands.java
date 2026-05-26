@@ -1,20 +1,21 @@
 package eu.tvrsier.create_logistic.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import eu.tvrsier.create_logistic.block.entity.LogisticControllerBlockEntity;
-import eu.tvrsier.create_logistic.logistic.inventory.LogisticInventoryScanner;
+import com.mojang.logging.LogUtils;
+import dev.ryanhcode.sable.Sable;
+import dev.ryanhcode.sable.sublevel.ServerSubLevel;
+import dev.ryanhcode.sable.sublevel.SubLevel;
 import eu.tvrsier.create_logistic.logistic.vehicle.LogisticVehicleContext;
 import eu.tvrsier.create_logistic.logistic.vehicle.LogisticVehicleRegistry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.neoforged.neoforge.items.IItemHandler;
-
-import java.util.List;
-import java.util.Map;
+import net.minecraft.server.level.ServerPlayer;
+import org.slf4j.Logger;
 
 public class CreateLogisticCommands {
+
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     private CreateLogisticCommands() {}
 
@@ -59,21 +60,43 @@ public class CreateLogisticCommands {
     }
 
     private static int getInventoryInVehicle(CommandSourceStack source) {
-        int found = 0;
-        var vehicles = LogisticVehicleRegistry.getVehicles();
-        if (vehicles.isEmpty()) {
-            source.sendSuccess(
-                    () -> Component.literal("No Logistic Vehicles detected."),
-                    false
-            );
+        ServerPlayer player = source.getPlayer();
+
+        if (player == null) {
+            source.sendFailure(Component.literal("Player not found."));
+            return 0;
         }
 
-        for (LogisticVehicleContext vehicle : vehicles) {
-            Map<BlockPos, IItemHandler> inventories = LogisticInventoryScanner.scanChunk(vehicle);
-            if (!inventories.isEmpty()) found++;
-            source.sendSuccess(() -> Component.literal("Inventories: " + inventories.size()), false);
+        SubLevel subLevel = Sable.HELPER.getTrackingOrVehicleSubLevel(player);
+
+        if (!(subLevel instanceof ServerSubLevel serverSubLevel)) {
+            source.sendFailure(Component.literal("No tracked/vehicle ServerSubLevel found."));
+            return 0;
         }
 
-        return found;
+        LogisticVehicleContext vehicle =
+                LogisticVehicleRegistry.getBySublevel(serverSubLevel);
+
+        if (vehicle == null) {
+            source.sendFailure(Component.literal("No Logistic Vehicle found for current SubLevel."));
+            return 0;
+        }
+
+        vehicle.inventoryState().debugDumpContents(vehicle.vehicleId());
+        vehicle.inventoryState().debugDumpCombinedContents(vehicle.vehicleId());
+
+        source.sendSuccess(
+                () -> Component.literal(
+                        "Inventory dump logged for vehicle "
+                                + vehicle.vehicleId()
+                                + " inventories="
+                                + vehicle.inventoryState().inventoryCounter()
+                                + " totalSlots="
+                                + vehicle.inventoryState().totalSlots()
+                ),
+                false
+        );
+
+        return vehicle.inventoryState().inventoryCounter();
     }
 }

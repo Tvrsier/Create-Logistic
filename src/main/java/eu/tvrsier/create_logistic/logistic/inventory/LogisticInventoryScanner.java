@@ -88,8 +88,8 @@ public class LogisticInventoryScanner {
         return inventories;
     }
 
-    public static Map<BlockPos, IItemHandler> scanChunk(LogisticVehicleContext context) {
-        Map<BlockPos, IItemHandler> inventories = new HashMap<>();
+    public static Map<BlockPos, LogisticVehicleInventoryState.LogisticInventoryRef> scanChunk(LogisticVehicleContext context) {
+        Map<BlockPos, LogisticVehicleInventoryState.LogisticInventoryRef> inventories = new HashMap<>();
         ServerLevel scanLevel = context.status().subLevel().getLevel();
 
         for (PlotChunkHolder chunkHolder : context.status().subLevel().getPlot().getLoadedChunks()) {
@@ -110,7 +110,16 @@ public class LogisticInventoryScanner {
                 );
 
                 if (handler != null) {
-                    inventories.put(pos.immutable(), handler);
+                    BlockPos immutablePos = pos.immutable();
+                    BlockState state = scanLevel.getBlockState(pos);
+                    inventories.put(
+                            immutablePos,
+                            new LogisticVehicleInventoryState.LogisticInventoryRef(
+                                    immutablePos,
+                                    state,
+                                    handler
+                            )
+                    );
                 }
             }
         }

@@ -2,10 +2,11 @@
 	"format_version": "1.21.11",
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
+    "render_type": "minecraft:cutout",
 	"textures": {
-		"redstone_antenna": "create:block/redstone_antenna",
-		"particle": "create:block/redstone_bridge",
-		"redstone_bridge": "create:block/redstone_bridge"
+		"redstone_antenna": "create_logistic:block/redstone_antenna",
+		"particle": "create_logistic:block/redstone_bridge",
+		"redstone_bridge": "create_logistic:block/redstone_bridge"
 	},
 	"elements": [
 		{
