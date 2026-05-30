@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "create_logistic:logistic_controller"
+    "create_logistic:logistic_controller",
+    "create_logistic:docking_connector",
+    "create_logistic:paired_docking_connector"
   ]
 }

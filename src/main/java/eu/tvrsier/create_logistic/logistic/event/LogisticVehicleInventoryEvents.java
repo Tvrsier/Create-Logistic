@@ -1,4 +1,4 @@
-package eu.tvrsier.create_logistic.event;
+package eu.tvrsier.create_logistic.logistic.event;
 
 import com.mojang.logging.LogUtils;
 import dev.ryanhcode.sable.Sable;

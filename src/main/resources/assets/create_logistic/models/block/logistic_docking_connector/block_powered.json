@@ -1,0 +1,7 @@
+{
+	"parent": "create_logistic:block/docking_connector/block",
+	"textures": {
+		"0": "create_logistic:block/logistic_docking_connector/dock_powered",
+		"2": "create_logistic:block/logistic_docking_connector/signal_modules_powered"
+	}
+}

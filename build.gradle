@@ -236,3 +236,12 @@ idea {
         downloadJavadoc = true
     }
 }
+
+tasks.register("copyDevResourcePacks", Copy) {
+    from("dev_resourcepacks")
+    into("run/resourcepacks")
+}
+
+tasks.named("runClient") {
+    dependsOn("copyDevResourcePacks")
+}
