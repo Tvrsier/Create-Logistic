@@ -2,6 +2,7 @@ package eu.tvrsier.create_logistic;
 
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
+import eu.tvrsier.create_logistic.client.CreateLogisticClient;
 import eu.tvrsier.create_logistic.command.CreateLogisticCommands;
 import eu.tvrsier.create_logistic.registry.BlockEntityRegistry;
 import eu.tvrsier.create_logistic.registry.BlockRegistry;
@@ -50,6 +51,7 @@ import org.slf4j.Logger;
                             .displayItems((parameters, output) -> {
                                 output.accept(ItemRegistry.LOGISTIC_CONTROLLER.get());
                                 output.accept(ItemRegistry.TOGGLE_LINK.get());
+                                output.accept(ItemRegistry.LOGISTIC_DOCKING_CONNECTOR.get());
                             })
                             .build());
 
@@ -102,15 +104,10 @@ import org.slf4j.Logger;
     @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
         @SubscribeEvent public static void onClientSetup(FMLClientSetupEvent event) {
-            // Some client setup code
-            LOGGER.info("HELLO FROM CLIENT SETUP");
-            LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+            CreateLogisticClient.onClientSetup(event);
         }
         @SubscribeEvent public static void registerBER(EntityRenderersEvent.RegisterRenderers event) {
-            event.registerBlockEntityRenderer(
-                    BlockEntityRegistry.TOGGLE_LINK.get(),
-                    SmartBlockEntityRenderer::new
-            );
+            CreateLogisticClient.registerBlockEntityRenderers(event);
         }
         @SubscribeEvent public static void onRegisterCommands(RegisterCommandsEvent event) {
             CreateLogisticCommands.register(event.getDispatcher());

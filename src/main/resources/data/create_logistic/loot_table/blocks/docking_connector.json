@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "create_logistic:docking_connector"
+          "name": "create_logistic:logistic_docking_connector"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "create_logistic:blocks/docking_connector"
+  "random_sequence": "create_logistic:blocks/logistic_docking_connector"
 }

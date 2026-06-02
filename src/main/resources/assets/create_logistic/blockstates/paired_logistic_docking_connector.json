@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "create_logistic:block/logistic_docking_connector/block"
+    },
+    "facing=up": {
+      "model": "create_logistic:block/logistic_docking_connector/block"
+    },
+    "facing=north": {
+      "model": "create_logistic:block/logistic_docking_connector/block"
+    },
+    "facing=south": {
+      "model": "create_logistic:block/logistic_docking_connector/block"
+    },
+    "facing=west": {
+      "model": "create_logistic:block/logistic_docking_connector/block"
+    },
+    "facing=east": {
+      "model": "create_logistic:block/logistic_docking_connector/block"
+    }
+  }
+}

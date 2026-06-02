@@ -3,5 +3,7 @@
   "block.create_logistic.logistic_controller": "Logistic Controller",
   "item.create_logistic.logistic_controller": "Logistic Controller",
   "block.create_logistic.toggle_link": "Redstone Toggle Link",
-  "item.create_logistic.toggle_link": "Redstone Toggle Link"
+  "item.create_logistic.toggle_link": "Redstone Toggle Link",
+  "block.create_logistic.logistic_docking_connector": "Logistic Docking Connector",
+  "item.create_logistic.logistic_docking_connector": "Logistic Docking Connector"
 }

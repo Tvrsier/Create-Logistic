@@ -16,6 +16,12 @@ public final class ItemRegistry {
             "toggle_link", BlockRegistry.TOGGLE_LINK
     );
 
+    public static final DeferredItem<BlockItem> LOGISTIC_DOCKING_CONNECTOR =
+            ITEMS.registerSimpleBlockItem(
+                    "logistic_docking_connector",
+                    BlockRegistry.LOGISTIC_DOCKING_CONNECTOR
+            );
+
     private ItemRegistry() {
     }
 }

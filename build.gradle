@@ -144,9 +144,9 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
     // Example mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
-    // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
-    // compileOnly "mezz.jei:jei-${mc_version}-forge-api:${jei_version}"
-    // runtimeOnly "mezz.jei:jei-${mc_version}-forge:${jei_version}"
+    // compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
+    // compileOnly "mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"
+    // runtimeOnly "mezz.jei:jei-${minecraft_version}-forge:${jei_version}"
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
@@ -186,7 +186,10 @@ dependencies {
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
     runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
     runtimeOnly files("libs/nbtviewer-${nbt_viewer_version}-neoforge.jar")
-    runtimeOnly "foundry.veil:veil-common-${minecraft_version}:4.1.1"
+    compileOnly "foundry.veil:veil-common-${minecraft_version}:${veil_version}"
+    runtimeOnly "foundry.veil:veil-common-${minecraft_version}:${veil_version}"
+    compileOnly "dev.engine-room.flywheel:flywheel-neoforge-$minecraft_version:${flywheel_version}"
+    runtimeOnly "dev.engine-room.flywheel:flywheel-neoforge-$minecraft_version:${flywheel_version}"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -242,6 +245,27 @@ tasks.register("copyDevResourcePacks", Copy) {
     into("run/resourcepacks")
 }
 
+tasks.register("pruneRunClientLogs") {
+    group = "verification"
+    description = "Keeps only the 5 newest log files in run/logs before running the client."
+
+    def logsDirProvider = layout.projectDirectory.dir("run/logs")
+
+    inputs.dir(logsDirProvider)
+
+    doLast {
+        def logsDir = logsDirProvider.asFile
+        if (!logsDir.exists()) return
+
+        def logFiles = logsDir.listFiles()?.findAll { it.isFile() }?.sort { a, b ->
+            b.lastModified() <=> a.lastModified()
+        } ?: []
+
+        logFiles.drop(5).each { it.delete() }
+    }
+}
+
 tasks.named("runClient") {
     dependsOn("copyDevResourcePacks")
+    dependsOn("pruneRunClientLogs")
 }

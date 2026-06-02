@@ -5,10 +5,14 @@ import dev.ryanhcode.sable.Sable;
 import dev.ryanhcode.sable.sublevel.ServerSubLevel;
 import dev.ryanhcode.sable.sublevel.SubLevel;
 import eu.tvrsier.create_logistic.CreateLogistic;
+import eu.tvrsier.create_logistic.block.LogisticDockingConnectorBlock;
+import eu.tvrsier.create_logistic.block.entity.LogisticDockingConnectorBlockEntity;
 import eu.tvrsier.create_logistic.logistic.vehicle.LogisticVehicleContext;
 import eu.tvrsier.create_logistic.logistic.vehicle.LogisticVehicleRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -47,41 +51,81 @@ public final class LogisticVehicleInventoryEvents {
         return Optional.of(new VehicleBlockEventContext(level, pos, vehicle));
     }
 
-    @SubscribeEvent public static void onBlockPlaced(BlockEvent.EntityPlaceEvent event) {
+    @SubscribeEvent
+    public static void onBlockPlaced(BlockEvent.EntityPlaceEvent event) {
         resolve(event).ifPresent(context -> {
+            var state = context.level().getBlockState(context.pos());
+
+            if (state.getBlock() instanceof LogisticDockingConnectorBlock block) {
+                LogisticDockingConnectorBlockEntity be = block.getBlockEntity(context.level(), context.pos());
+
+                if (be == null) {
+                    LOGGER.warn(
+                            "Detected Logistic Docking Connector at {} but cannot find Block Entity",
+                            context.pos()
+                    );
+                    return;
+                }
+
+                be.setVehicleContext(context.vehicle());
+                LOGGER.info(
+                        "Linked Logistic Docking Connector at {} to vehicle {}",
+                        context.pos(),
+                        context.vehicle().vehicleId()
+                );
+                return;
+            }
+
             IItemHandler handler = context.level().getCapability(
                     Capabilities.ItemHandler.BLOCK,
                     context.pos(),
                     null
             );
 
-            if (handler != null) {
-                var state = context.level().getBlockState(context.pos());
+            if (handler == null) return;
 
-                context.vehicle.inventoryState().add(context.pos(), state, handler);
-                LOGGER.info(
-                        "Found new inventory at {} [{} slots] for vehicle {}. Total inventories: {}, total slots: {}",
-                        context.pos(),
-                        handler.getSlots(),
-                        context.vehicle.vehicleId(),
-                        context.vehicle.inventoryState().inventoryCounter(),
-                        context.vehicle.inventoryState().totalSlots()
-                );
-            }
+            context.vehicle().inventoryState().add(context.pos(), state, handler);
+
+            LOGGER.info(
+                    "Found new inventory at {} [{} slots] for vehicle {}. Total inventories: {}, total slots: {}",
+                    context.pos(),
+                    handler.getSlots(),
+                    context.vehicle().vehicleId(),
+                    context.vehicle().inventoryState().inventoryCounter(),
+                    context.vehicle().inventoryState().totalSlots()
+            );
         });
     }
 
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
         resolve(event).ifPresent(context -> {
-            boolean removed = context.vehicle.inventoryState().remove(context.pos());
+            var state = context.level().getBlockState(context.pos());
+
+            if (state.getBlock() instanceof LogisticDockingConnectorBlock block) {
+                LogisticDockingConnectorBlockEntity be = block.getBlockEntity(context.level(), context.pos());
+
+                if (be != null) {
+                    be.clearVehicleContext(context.vehicle());
+                }
+
+                LOGGER.info(
+                        "Unlinked Logistic Docking Connector at {} from vehicle {}",
+                        context.pos(),
+                        context.vehicle().vehicleId()
+                );
+                return;
+            }
+
+            boolean removed = context.vehicle().inventoryState().remove(context.pos());
+
             if (removed) {
                 LOGGER.info(
                         "Removed inventory at {} for vehicle {}. Remaining inventories: {}, total slots: {}",
                         context.pos(),
-                        context.vehicle.vehicleId(),
-                        context.vehicle.inventoryState().inventoryCounter(),
-                        context.vehicle.inventoryState().totalSlots()
+                        context.vehicle().vehicleId(),
+                        context.vehicle().inventoryState().inventoryCounter(),
+                        context.vehicle().inventoryState().totalSlots()
                 );
             }
         });

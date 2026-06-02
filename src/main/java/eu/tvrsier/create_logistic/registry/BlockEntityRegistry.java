@@ -2,6 +2,7 @@ package eu.tvrsier.create_logistic.registry;
 
 import eu.tvrsier.create_logistic.CreateLogistic;
 import eu.tvrsier.create_logistic.block.entity.LogisticControllerBlockEntity;
+import eu.tvrsier.create_logistic.block.entity.LogisticDockingConnectorBlockEntity;
 import eu.tvrsier.create_logistic.block.entity.ToggleLinkBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -29,6 +30,15 @@ public class BlockEntityRegistry {
                     () -> BlockEntityType.Builder.of(
                             ToggleLinkBlockEntity::new,
                             BlockRegistry.TOGGLE_LINK.get()
+                    ).build(null)
+            );
+
+    public static final Supplier<BlockEntityType<LogisticDockingConnectorBlockEntity>> LOGISTIC_DOCKING_CONNECTOR =
+            BLOCK_ENTITIES.register(
+                    "logistic_docking_connector",
+                    () -> BlockEntityType.Builder.of(
+                            LogisticDockingConnectorBlockEntity::new,
+                            BlockRegistry.LOGISTIC_DOCKING_CONNECTOR.get()
                     ).build(null)
             );
 
