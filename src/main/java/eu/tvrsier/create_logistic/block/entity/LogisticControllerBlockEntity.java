@@ -35,8 +35,8 @@ public class LogisticControllerBlockEntity extends BlockEntity {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public LogisticControllerBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityRegistry.LOGISTIC_CONTROLLER_BLOCK_ENTITY.get(), pos, state);
+    public LogisticControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     public void sendTestPulse() {

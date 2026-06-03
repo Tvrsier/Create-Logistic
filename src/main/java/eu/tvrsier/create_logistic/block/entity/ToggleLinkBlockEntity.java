@@ -24,10 +24,6 @@ public class ToggleLinkBlockEntity extends SmartBlockEntity {
     private boolean lastNetworkPowered;
     private LinkBehaviour link;
 
-    public ToggleLinkBlockEntity(BlockPos pos, BlockState state) {
-        this(BlockEntityRegistry.TOGGLE_LINK.get(), pos, state);
-    }
-
     public ToggleLinkBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }

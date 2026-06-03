@@ -3,7 +3,7 @@ package eu.tvrsier.create_logistic.block;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.WrenchableDirectionalBlock;
 import eu.tvrsier.create_logistic.block.entity.LogisticDockingConnectorBlockEntity;
-import eu.tvrsier.create_logistic.registry.BlockEntityRegistry;
+import eu.tvrsier.create_logistic.index.CLBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -72,7 +72,7 @@ public class LogisticDockingConnectorBlock extends WrenchableDirectionalBlock im
 
     @Override
     public BlockEntityType<? extends LogisticDockingConnectorBlockEntity> getBlockEntityType() {
-        return BlockEntityRegistry.LOGISTIC_DOCKING_CONNECTOR.get();
+        return CLBlockEntityTypes.LOGISTIC_DOCKING_CONNECTOR.get();
     }
 
     @Override

@@ -1,18 +1,19 @@
 package eu.tvrsier.create_logistic;
 
 import com.mojang.logging.LogUtils;
-import com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
+import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import eu.tvrsier.create_logistic.client.CreateLogisticClient;
 import eu.tvrsier.create_logistic.command.CreateLogisticCommands;
-import eu.tvrsier.create_logistic.registry.BlockEntityRegistry;
-import eu.tvrsier.create_logistic.registry.BlockRegistry;
-import eu.tvrsier.create_logistic.registry.ItemRegistry;
-import net.minecraft.client.Minecraft;
+import eu.tvrsier.create_logistic.index.CLBlockEntityTypes;
+import eu.tvrsier.create_logistic.index.CLBlocks;
+import eu.tvrsier.create_logistic.index.CLItems;
+import eu.tvrsier.create_logistic.registrate.CreateLogisticRegistrate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -25,7 +26,6 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -42,16 +42,21 @@ import org.slf4j.Logger;
     // namespace
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
+    private static final NonNullSupplier<CreateLogisticRegistrate> REGISTRATE =
+            NonNullSupplier.lazy(() ->
+                    (CreateLogisticRegistrate) new CreateLogisticRegistrate(
+                            asResource("main"),
+                            MODID
+                    ).defaultCreativeTab((ResourceKey<CreativeModeTab>) null)
+            );
 
     // Create a dedicated creative tab for this mod so the "Create Logistic" tab appears and contains our items
     public static final net.neoforged.neoforge.registries.DeferredHolder<CreativeModeTab, CreativeModeTab> LOGISTIC_TAB =
             CREATIVE_MODE_TABS.register("create_logistic_tab",
                     () -> CreativeModeTab.builder().title(Component.translatable("itemGroup.create_logistic"))
-                            .icon(() -> ItemRegistry.LOGISTIC_CONTROLLER.get().getDefaultInstance())
+                            .icon(() -> CLBlocks.LOGISTIC_CONTROLLER.asItem().getDefaultInstance())
                             .displayItems((parameters, output) -> {
-                                output.accept(ItemRegistry.LOGISTIC_CONTROLLER.get());
-                                output.accept(ItemRegistry.TOGGLE_LINK.get());
-                                output.accept(ItemRegistry.LOGISTIC_DOCKING_CONNECTOR.get());
+                                CreateLogisticRegistrate.TAB_ITEMS.forEach(itemSupplier -> output.accept(itemSupplier.get()));
                             })
                             .build());
 
@@ -63,11 +68,11 @@ import org.slf4j.Logger;
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     public CreateLogistic(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
-        modEventBus.addListener(this::addCreative);
 
-        BlockRegistry.BLOCKS.register(modEventBus);
-        ItemRegistry.ITEMS.register(modEventBus);
-        BlockEntityRegistry.BLOCK_ENTITIES.register(modEventBus);
+        getRegistrate().registerEventListeners(modEventBus);
+        CLBlocks.register();
+        CLItems.register();
+        CLBlockEntityTypes.register();
         CREATIVE_MODE_TABS.register(modEventBus);
 
         NeoForge.EVENT_BUS.register(this);
@@ -83,14 +88,6 @@ import org.slf4j.Logger;
         LOGGER.info(Config.magicNumberIntroduction + Config.magicNumber);
 
         Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
-    }
-
-    // Add the example block item to the building blocks tab
-    private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        // Add the logistic controller block item to the Functional Blocks tab (use .get() to pass the Item instance)
-        if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
-            event.accept(ItemRegistry.LOGISTIC_CONTROLLER.get());
-        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
@@ -112,5 +109,13 @@ import org.slf4j.Logger;
         @SubscribeEvent public static void onRegisterCommands(RegisterCommandsEvent event) {
             CreateLogisticCommands.register(event.getDispatcher());
         }
+    }
+
+    public static ResourceLocation asResource(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MODID, path);
+    }
+
+    public static CreateLogisticRegistrate getRegistrate() {
+        return REGISTRATE.get();
     }
 }

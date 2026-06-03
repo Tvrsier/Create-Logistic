@@ -15,6 +15,7 @@ repositories {
     maven { url = "https://maven.ftb.dev/releases" }
     maven { url "https://maven.architectury.dev/" }
     maven { url = "https://maven.ryanhcode.dev/releases" }
+    maven { url = "https://maven.ithundxr.dev/snapshots" } // Registrate
     maven {
         name = "Fuzs Mod Resources"
         url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
@@ -190,6 +191,7 @@ dependencies {
     runtimeOnly "foundry.veil:veil-common-${minecraft_version}:${veil_version}"
     compileOnly "dev.engine-room.flywheel:flywheel-neoforge-$minecraft_version:${flywheel_version}"
     runtimeOnly "dev.engine-room.flywheel:flywheel-neoforge-$minecraft_version:${flywheel_version}"
+    implementation("com.tterrag.registrate:Registrate:${registrate_version}")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

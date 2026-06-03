@@ -4,12 +4,9 @@ import com.simibubi.create.AllShapes;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.WrenchableDirectionalBlock;
 import eu.tvrsier.create_logistic.block.entity.ToggleLinkBlockEntity;
-import eu.tvrsier.create_logistic.registry.BlockEntityRegistry;
-import net.createmod.catnip.data.Iterate;
+import eu.tvrsier.create_logistic.index.CLBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -129,7 +126,7 @@ public class ToggleLinkBlock extends WrenchableDirectionalBlock implements IBE<T
 
     @Override
     public BlockEntityType<? extends ToggleLinkBlockEntity> getBlockEntityType() {
-        return BlockEntityRegistry.TOGGLE_LINK.get();
+        return CLBlockEntityTypes.TOGGLE_LINK.get();
     }
 }
 

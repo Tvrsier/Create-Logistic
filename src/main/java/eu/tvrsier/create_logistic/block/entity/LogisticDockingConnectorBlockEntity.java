@@ -2,6 +2,7 @@ package eu.tvrsier.create_logistic.block.entity;
 
 import eu.tvrsier.create_logistic.block.LogisticDockingConnectorBlock;
 import eu.tvrsier.create_logistic.block.PairedLogisticDockingConnectorBlock;
+import eu.tvrsier.create_logistic.index.CLBlocks;
 import eu.tvrsier.create_logistic.logistic.docking_connector.LogisticDockingState;
 import eu.tvrsier.create_logistic.logistic.vehicle.LogisticVehicleContext;
 import eu.tvrsier.create_logistic.registry.BlockEntityRegistry;
@@ -14,6 +15,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -30,8 +32,8 @@ public class LogisticDockingConnectorBlockEntity extends BlockEntity {
 
     private LogisticVehicleContext vehicleContext;
 
-    public LogisticDockingConnectorBlockEntity(BlockPos pos, BlockState state) {
-        super(BlockEntityRegistry.LOGISTIC_DOCKING_CONNECTOR.get(), pos, state);
+    public LogisticDockingConnectorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     public void tickServer() {
@@ -80,7 +82,7 @@ public class LogisticDockingConnectorBlockEntity extends BlockEntity {
                 extended = false;
             } else if (level.getBlockState(pairedPos).isAir()) {
                 level.setBlockAndUpdate(pairedPos,
-                        BlockRegistry.PAIRED_LOGISTIC_DOCKING_CONNECTOR.get().
+                        CLBlocks.PAIRED_LOGISTIC_DOCKING_CONNECTOR.get().
                                 defaultBlockState().
                                 setValue(LogisticDockingConnectorBlock.FACING, facing.getOpposite()));
             }

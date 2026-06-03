@@ -1,6 +1,7 @@
 package eu.tvrsier.create_logistic.block;
 
 import eu.tvrsier.create_logistic.block.entity.LogisticControllerBlockEntity;
+import eu.tvrsier.create_logistic.index.CLBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
@@ -76,7 +77,11 @@ public class LogisticControllerBlock extends HorizontalDirectionalBlock implemen
 
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return new LogisticControllerBlockEntity(pos, state);
+        return new LogisticControllerBlockEntity(
+                CLBlockEntityTypes.LOGISTIC_CONTROLLER.get(),
+                pos,
+                state
+        );
     }
 
     @Override

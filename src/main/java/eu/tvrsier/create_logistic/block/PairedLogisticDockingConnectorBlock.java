@@ -2,6 +2,7 @@ package eu.tvrsier.create_logistic.block;
 
 import com.mojang.serialization.MapCodec;
 import dev.simulated_team.simulated.index.SimBlocks;
+import eu.tvrsier.create_logistic.index.CLBlocks;
 import eu.tvrsier.create_logistic.registry.BlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -71,7 +72,7 @@ public class PairedLogisticDockingConnectorBlock extends DirectionalBlock {
             if (player.isCreative()) {
                 final BlockPos connectorPos = pos.relative(state.getValue(FACING));
                 final BlockState connectorState = level.getBlockState(connectorPos);
-                if (connectorState.is(BlockRegistry.LOGISTIC_DOCKING_CONNECTOR.get())) {
+                if (connectorState.is(CLBlocks.LOGISTIC_DOCKING_CONNECTOR.get())) {
                     level.setBlock(connectorPos, Blocks.AIR.defaultBlockState(), 3);
                 }
             } else {
@@ -97,7 +98,7 @@ public class PairedLogisticDockingConnectorBlock extends DirectionalBlock {
         Direction facing = state.getValue(FACING);
         BlockState connectorBlock = level.getBlockState(pos.relative(facing));
 
-        return connectorBlock.is(BlockRegistry.LOGISTIC_DOCKING_CONNECTOR.get())
+        return connectorBlock.is(CLBlocks.LOGISTIC_DOCKING_CONNECTOR.get())
                 && connectorBlock.getValue(LogisticDockingConnectorBlock.FACING) == facing.getOpposite()
                 && connectorBlock.getValue(LogisticDockingConnectorBlock.EXTENDED);
     }
@@ -109,7 +110,7 @@ public class PairedLogisticDockingConnectorBlock extends DirectionalBlock {
 
         if (facing != direction) return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
 
-        if (neighborState.is(BlockRegistry.LOGISTIC_DOCKING_CONNECTOR.get())
+        if (neighborState.is(CLBlocks.LOGISTIC_DOCKING_CONNECTOR.get())
             && neighborState.getValue(LogisticDockingConnectorBlock.FACING) == facing.getOpposite()
             && neighborState.getValue(LogisticDockingConnectorBlock.EXTENDED)) {
             return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
@@ -135,6 +136,6 @@ public class PairedLogisticDockingConnectorBlock extends DirectionalBlock {
 
     @Override
     public @NotNull ItemStack getCloneItemStack(final @NotNull LevelReader level, final @NotNull BlockPos pos, final @NotNull BlockState state) {
-        return BlockRegistry.LOGISTIC_DOCKING_CONNECTOR.toStack();
+        return CLBlocks.LOGISTIC_DOCKING_CONNECTOR.asItem().getDefaultInstance();
     }
 }
