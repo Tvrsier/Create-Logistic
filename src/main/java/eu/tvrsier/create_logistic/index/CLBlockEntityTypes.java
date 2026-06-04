@@ -1,12 +1,10 @@
 package eu.tvrsier.create_logistic.index;
 
-import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import eu.tvrsier.create_logistic.CreateLogistic;
-import eu.tvrsier.create_logistic.block.LogisticControllerBlock;
-import eu.tvrsier.create_logistic.block.entity.LogisticControllerBlockEntity;
-import eu.tvrsier.create_logistic.block.entity.LogisticDockingConnectorBlockEntity;
-import eu.tvrsier.create_logistic.block.entity.ToggleLinkBlockEntity;
+import eu.tvrsier.create_logistic.content.block.logistic_controller.LogisticControllerBlockEntity;
+import eu.tvrsier.create_logistic.content.block.logistic_docking_connector.LogisticDockingConnectorBlockEntity;
+import eu.tvrsier.create_logistic.content.block.toggle_link.ToggleLinkBlockEntity;
 import eu.tvrsier.create_logistic.registrate.CreateLogisticRegistrate;
 
 public class CLBlockEntityTypes {

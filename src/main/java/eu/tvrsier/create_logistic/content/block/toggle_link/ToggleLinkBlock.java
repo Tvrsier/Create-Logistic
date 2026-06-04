@@ -1,9 +1,8 @@
-package eu.tvrsier.create_logistic.block;
+package eu.tvrsier.create_logistic.content.block.toggle_link;
 
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.WrenchableDirectionalBlock;
-import eu.tvrsier.create_logistic.block.entity.ToggleLinkBlockEntity;
 import eu.tvrsier.create_logistic.index.CLBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

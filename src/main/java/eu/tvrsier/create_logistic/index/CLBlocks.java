@@ -4,10 +4,10 @@ import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import eu.tvrsier.create_logistic.CreateLogistic;
-import eu.tvrsier.create_logistic.block.LogisticControllerBlock;
-import eu.tvrsier.create_logistic.block.LogisticDockingConnectorBlock;
-import eu.tvrsier.create_logistic.block.PairedLogisticDockingConnectorBlock;
-import eu.tvrsier.create_logistic.block.ToggleLinkBlock;
+import eu.tvrsier.create_logistic.content.block.logistic_controller.LogisticControllerBlock;
+import eu.tvrsier.create_logistic.content.block.logistic_docking_connector.LogisticDockingConnectorBlock;
+import eu.tvrsier.create_logistic.content.block.logistic_docking_connector.PairedLogisticDockingConnectorBlock;
+import eu.tvrsier.create_logistic.content.block.toggle_link.ToggleLinkBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.PushReaction;
 

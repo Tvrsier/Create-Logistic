@@ -1,18 +1,16 @@
-package eu.tvrsier.create_logistic.logistic.event;
+package eu.tvrsier.create_logistic.content.logistic.event;
 
 import com.mojang.logging.LogUtils;
 import dev.ryanhcode.sable.Sable;
 import dev.ryanhcode.sable.sublevel.ServerSubLevel;
 import dev.ryanhcode.sable.sublevel.SubLevel;
 import eu.tvrsier.create_logistic.CreateLogistic;
-import eu.tvrsier.create_logistic.block.LogisticDockingConnectorBlock;
-import eu.tvrsier.create_logistic.block.entity.LogisticDockingConnectorBlockEntity;
-import eu.tvrsier.create_logistic.logistic.vehicle.LogisticVehicleContext;
-import eu.tvrsier.create_logistic.logistic.vehicle.LogisticVehicleRegistry;
+import eu.tvrsier.create_logistic.content.block.logistic_docking_connector.LogisticDockingConnectorBlock;
+import eu.tvrsier.create_logistic.content.block.logistic_docking_connector.LogisticDockingConnectorBlockEntity;
+import eu.tvrsier.create_logistic.content.logistic.vehicle.LogisticVehicleContext;
+import eu.tvrsier.create_logistic.content.logistic.vehicle.LogisticVehicleRegistry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;

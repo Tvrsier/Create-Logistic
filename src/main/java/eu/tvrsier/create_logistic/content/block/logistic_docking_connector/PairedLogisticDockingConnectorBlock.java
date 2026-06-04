@@ -1,9 +1,7 @@
-package eu.tvrsier.create_logistic.block;
+package eu.tvrsier.create_logistic.content.block.logistic_docking_connector;
 
 import com.mojang.serialization.MapCodec;
-import dev.simulated_team.simulated.index.SimBlocks;
 import eu.tvrsier.create_logistic.index.CLBlocks;
-import eu.tvrsier.create_logistic.registry.BlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;

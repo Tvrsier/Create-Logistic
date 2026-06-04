@@ -1,8 +1,7 @@
-package eu.tvrsier.create_logistic.block;
+package eu.tvrsier.create_logistic.content.block.logistic_docking_connector;
 
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.WrenchableDirectionalBlock;
-import eu.tvrsier.create_logistic.block.entity.LogisticDockingConnectorBlockEntity;
 import eu.tvrsier.create_logistic.index.CLBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -81,13 +80,9 @@ public class LogisticDockingConnectorBlock extends WrenchableDirectionalBlock im
             BlockState state,
             BlockEntityType<T> type
     ) {
-        if (level.isClientSide) {
-            return null;
-        }
-
         return (tickerLevel, pos, tickerState, blockEntity) -> {
             if (blockEntity instanceof LogisticDockingConnectorBlockEntity connector) {
-                connector.tickServer();
+                connector.tick();
             }
         };
     }

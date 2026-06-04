@@ -1,4 +1,4 @@
-package eu.tvrsier.create_logistic.logistic.vehicle;
+package eu.tvrsier.create_logistic.content.logistic.vehicle;
 
 import dev.ryanhcode.sable.sublevel.ServerSubLevel;
 

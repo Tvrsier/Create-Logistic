@@ -1,4 +1,4 @@
-package eu.tvrsier.create_logistic.logistic.docking_connector;
+package eu.tvrsier.create_logistic.content.logistic.docking_connector;
 
 public enum LogisticDockingState {
     UNPOWERED,

@@ -1,26 +1,21 @@
-package eu.tvrsier.create_logistic.block.entity;
+package eu.tvrsier.create_logistic.content.block.logistic_controller;
 
 import com.mojang.logging.LogUtils;
-import eu.tvrsier.create_logistic.logistic.inventory.LogisticInventoryScanner;
-import eu.tvrsier.create_logistic.logistic.inventory.LogisticVehicleInventoryState;
-import eu.tvrsier.create_logistic.logistic.vehicle.LogisticVehicleContext;
-import eu.tvrsier.create_logistic.logistic.vehicle.LogisticVehicleIdFactory;
-import eu.tvrsier.create_logistic.logistic.vehicle.LogisticVehicleRegistry;
-import eu.tvrsier.create_logistic.physics.PhysicsContraptionDetector;
-import eu.tvrsier.create_logistic.physics.PhysicsContraptionStatus;
+import eu.tvrsier.create_logistic.content.logistic.inventory.LogisticInventoryScanner;
+import eu.tvrsier.create_logistic.content.logistic.inventory.LogisticVehicleInventoryState;
+import eu.tvrsier.create_logistic.content.logistic.vehicle.LogisticVehicleContext;
+import eu.tvrsier.create_logistic.content.logistic.vehicle.LogisticVehicleIdFactory;
+import eu.tvrsier.create_logistic.content.logistic.vehicle.LogisticVehicleRegistry;
+import eu.tvrsier.create_logistic.content.physics.PhysicsContraptionDetector;
+import eu.tvrsier.create_logistic.content.physics.PhysicsContraptionStatus;
 import eu.tvrsier.create_logistic.redstone.ControllerTransmitter;
-import eu.tvrsier.create_logistic.registry.BlockEntityRegistry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.items.IItemHandler;
 import org.slf4j.Logger;
 
 import java.util.*;

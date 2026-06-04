@@ -1,6 +1,5 @@
-package eu.tvrsier.create_logistic.block;
+package eu.tvrsier.create_logistic.content.block.logistic_controller;
 
-import eu.tvrsier.create_logistic.block.entity.LogisticControllerBlockEntity;
 import eu.tvrsier.create_logistic.index.CLBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

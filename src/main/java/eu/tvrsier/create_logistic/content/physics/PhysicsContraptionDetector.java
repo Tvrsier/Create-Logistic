@@ -1,4 +1,4 @@
-package eu.tvrsier.create_logistic.physics;
+package eu.tvrsier.create_logistic.content.physics;
 
 import com.mojang.logging.LogUtils;
 import dev.ryanhcode.sable.Sable;

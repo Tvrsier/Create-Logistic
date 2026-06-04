@@ -1,12 +1,10 @@
-package eu.tvrsier.create_logistic.block.entity;
+package eu.tvrsier.create_logistic.content.block.toggle_link;
 
 import com.simibubi.create.content.redstone.link.LinkBehaviour;
 import com.simibubi.create.content.redstone.link.RedstoneLinkFrequencySlot;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
-import eu.tvrsier.create_logistic.block.ToggleLinkBlock;
-import eu.tvrsier.create_logistic.registry.BlockEntityRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;

@@ -1,10 +1,8 @@
-package eu.tvrsier.create_logistic.logistic.inventory;
+package eu.tvrsier.create_logistic.content.logistic.inventory;
 import com.mojang.logging.LogUtils;
 import dev.ryanhcode.sable.Sable;
-import dev.ryanhcode.sable.sublevel.ServerSubLevel;
-import dev.ryanhcode.sable.sublevel.plot.LevelPlot;
 import dev.ryanhcode.sable.sublevel.plot.PlotChunkHolder;
-import eu.tvrsier.create_logistic.logistic.vehicle.LogisticVehicleContext;
+import eu.tvrsier.create_logistic.content.logistic.vehicle.LogisticVehicleContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;

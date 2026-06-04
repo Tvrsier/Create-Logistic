@@ -1,4 +1,4 @@
-package eu.tvrsier.create_logistic.physics;
+package eu.tvrsier.create_logistic.content.physics;
 
 import dev.ryanhcode.sable.sublevel.ServerSubLevel;
 import net.minecraft.core.BlockPos;

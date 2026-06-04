@@ -1,6 +1,6 @@
-package eu.tvrsier.create_logistic.logistic.vehicle;
+package eu.tvrsier.create_logistic.content.logistic.vehicle;
 
-import eu.tvrsier.create_logistic.physics.PhysicsContraptionStatus;
+import eu.tvrsier.create_logistic.content.physics.PhysicsContraptionStatus;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;

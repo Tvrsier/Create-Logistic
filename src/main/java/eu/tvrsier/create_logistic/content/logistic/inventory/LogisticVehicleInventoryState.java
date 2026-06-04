@@ -1,4 +1,4 @@
-package eu.tvrsier.create_logistic.logistic.inventory;
+package eu.tvrsier.create_logistic.content.logistic.inventory;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
