@@ -4,45 +4,75 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import dev.engine_room.flywheel.lib.transform.TransformStack;
-import eu.tvrsier.create_logistic.content.block.logistic_docking_connector.LogisticDockingConnectorBlock;
-import eu.tvrsier.create_logistic.content.block.logistic_docking_connector.LogisticDockingConnectorBlockEntity;
-import eu.tvrsier.create_logistic.client.registry.PartialModelRegistry;
+import eu.tvrsier.create_logistic.client.registry.CLPartialModels;
+import eu.tvrsier.create_logistic.content.block.logistic_docking_connector.CLDockingConnectorBlockEntity;
 import net.createmod.catnip.math.AngleHelper;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 
-public class LogisticDockingConnectorRenderer extends SafeBlockEntityRenderer<LogisticDockingConnectorBlockEntity> {
+public class CLDockingConnectorRenderer extends SafeBlockEntityRenderer<CLDockingConnectorBlockEntity> {
 
-    public LogisticDockingConnectorRenderer(BlockEntityRendererProvider.Context context) {}
+    public CLDockingConnectorRenderer(BlockEntityRendererProvider.Context context) {
+    }
 
     @Override
-    protected void renderSafe(LogisticDockingConnectorBlockEntity be, float partialTicks, PoseStack ms,
-            MultiBufferSource bufferSource, int light, int overlay) {
+    protected void renderSafe(
+            CLDockingConnectorBlockEntity be,
+            float partialTicks,
+            PoseStack ms,
+            MultiBufferSource bufferSource,
+            int light,
+            int overlay
+    ) {
         VertexConsumer vb = bufferSource.getBuffer(RenderType.cutout());
-        Direction direction = be.getBlockState().getValue(LogisticDockingConnectorBlock.FACING);
-        BlockState blockState = be.getBlockState();
-        float rotation = be.getFeetRotation(partialTicks) * 90;
 
-        SuperByteBuffer piston1 = CachedBuffers.partial(PartialModelRegistry.DOCKING_CONNECTOR_MAIN_PISTON_BOTTOM, blockState);
-        SuperByteBuffer piston2 = CachedBuffers.partial(PartialModelRegistry.DOCKING_CONNECTOR_MAIN_PISTON_TOP, blockState);
-        ms.pushPose();
-        rotateToFaceCentered(ms, direction);
+        Direction direction = be.getBlockState().getValue(BlockStateProperties.FACING);
+        BlockState blockState = be.getBlockState();
 
         float extension = be.getExtensionDistance(partialTicks);
+        float rotation = be.getFeetRotation(partialTicks) * 90;
+
+        SuperByteBuffer piston1 = CachedBuffers.partial(
+                CLPartialModels.LOGISTIC_DOCKING_CONNECTOR_MAIN_PISTON_BOTTOM,
+                blockState
+        );
+
+        SuperByteBuffer piston2 = CachedBuffers.partial(
+                CLPartialModels.LOGISTIC_DOCKING_CONNECTOR_MAIN_PISTON_TOP,
+                blockState
+        );
+
+        SuperByteBuffer sidePiston1 = CachedBuffers.partial(
+                CLPartialModels.LOGISTIC_DOCKING_CONNECTOR_SIDE_PISTON_BOTTOM,
+                blockState
+        );
+
+        SuperByteBuffer sidePiston2 = CachedBuffers.partial(
+                CLPartialModels.LOGISTIC_DOCKING_CONNECTOR_SIDE_PISTON_TOP,
+                blockState
+        );
+
+        SuperByteBuffer foot = CachedBuffers.partial(
+                CLPartialModels.LOGISTIC_DOCKING_CONNECTOR_FOOT,
+                blockState
+        );
+
+        ms.pushPose();
+
+        rotateToFaceCentered(ms, direction);
 
         piston1.translate(0, extension * 0.5, 0);
         piston2.translate(0, extension, 0);
+
         piston1.light(light).renderInto(ms, vb);
         piston2.light(light).renderInto(ms, vb);
 
@@ -67,12 +97,9 @@ public class LogisticDockingConnectorRenderer extends SafeBlockEntityRenderer<Lo
 
         for (int i = 0; i < 4; i++) {
             ms.pushPose();
+
             ms.translate(0.5, 0, 0.5);
             TransformStack.of(ms).rotateYDegrees(i * 90);
-
-            SuperByteBuffer sidePiston1 = CachedBuffers.partial(PartialModelRegistry.DOCKING_CONNECTOR_SIDE_PISTON_BOTTOM, blockState);
-            SuperByteBuffer sidePiston2 = CachedBuffers.partial(PartialModelRegistry.DOCKING_CONNECTOR_SIDE_PISTON_TOP, blockState);
-            SuperByteBuffer foot = CachedBuffers.partial(PartialModelRegistry.DOCKING_CONNECTOR_FOOT, blockState);
 
             sidePiston1.translate(0, sidePistonBottomAnchor.y, sidePistonBottomAnchor.x);
             sidePiston2.translate(0, sidePistonTopAnchor.y, sidePistonTopAnchor.x);
@@ -85,8 +112,10 @@ public class LogisticDockingConnectorRenderer extends SafeBlockEntityRenderer<Lo
             sidePiston1.light(light).renderInto(ms, vb);
             sidePiston2.light(light).renderInto(ms, vb);
             foot.light(light).renderInto(ms, vb);
+
             ms.popPose();
         }
+
         ms.popPose();
     }
 
@@ -103,23 +132,14 @@ public class LogisticDockingConnectorRenderer extends SafeBlockEntityRenderer<Lo
                 .uncenter();
     }
 
-    private static Vector2f rotateVector2f(Vector2f vec, float angle) {
+    private Vector2f rotateVector2f(Vector2f v, float angle) {
         angle = (float) Math.toRadians(angle);
+
         float s = Mth.sin(angle);
         float c = Mth.cos(angle);
-        vec.set(vec.x * c + vec.y * s, vec.y * c - vec.x * s);
-        return vec;
-    }
 
-    @Override
-    public @NotNull AABB getRenderBoundingBox(@NotNull LogisticDockingConnectorBlockEntity be) {
-        BlockPos blockPos = be.getBlockPos();
-        Direction facing = be.getBlockState().getValue(LogisticDockingConnectorBlock.FACING);
+        v.set(v.x * c + v.y * s, v.y * c - v.x * s);
 
-        return new AABB(blockPos).expandTowards(
-                facing.getStepX() * 2.0D,
-                facing.getStepY() * 2.0D,
-                facing.getStepZ() * 2.0D
-        );
+        return v;
     }
 }

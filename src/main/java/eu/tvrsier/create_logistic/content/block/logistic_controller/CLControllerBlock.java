@@ -25,8 +25,8 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-public class LogisticControllerBlock extends HorizontalDirectionalBlock implements EntityBlock {
-    public static final MapCodec<LogisticControllerBlock> CODEC = simpleCodec(LogisticControllerBlock::new);
+public class CLControllerBlock extends HorizontalDirectionalBlock implements EntityBlock {
+    public static final MapCodec<CLControllerBlock> CODEC = simpleCodec(CLControllerBlock::new);
 
     private static final VoxelShape SHAPE = Shapes.or(
             Block.box(0, 0, 0, 16, 16, 16),
@@ -39,7 +39,7 @@ public class LogisticControllerBlock extends HorizontalDirectionalBlock implemen
     );
 
 
-    public LogisticControllerBlock(BlockBehaviour.Properties properties) {
+    public CLControllerBlock(BlockBehaviour.Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
@@ -76,7 +76,7 @@ public class LogisticControllerBlock extends HorizontalDirectionalBlock implemen
 
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
-        return new LogisticControllerBlockEntity(
+        return new CLControllerBlockEntity(
                 CLBlockEntityTypes.LOGISTIC_CONTROLLER.get(),
                 pos,
                 state
@@ -91,7 +91,7 @@ public class LogisticControllerBlock extends HorizontalDirectionalBlock implemen
             @NotNull Player player,
             @NotNull BlockHitResult hitResult
     ) {
-        if(!level.isClientSide && level.getBlockEntity(pos) instanceof LogisticControllerBlockEntity be) {
+        if(!level.isClientSide && level.getBlockEntity(pos) instanceof CLControllerBlockEntity be) {
             be.sendTestPulse();
         }
 
@@ -107,7 +107,7 @@ public class LogisticControllerBlock extends HorizontalDirectionalBlock implemen
         if(level.isClientSide) return null;
 
         return (lvl, pos, blockStaate, blockEntity) -> {
-            if(blockEntity instanceof LogisticControllerBlockEntity be) {
+            if(blockEntity instanceof CLControllerBlockEntity be) {
                 be.tickServer();
             }
         };

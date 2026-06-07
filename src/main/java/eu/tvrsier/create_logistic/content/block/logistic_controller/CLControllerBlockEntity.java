@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 
 import java.util.*;
 
-public class LogisticControllerBlockEntity extends BlockEntity {
+public class CLControllerBlockEntity extends BlockEntity {
     private final List<ControllerTransmitter> activeTransmitters = new ArrayList<>();
     private LogisticVehicleContext vehicleContext;
     private int vehicleDetectionCooldown = 0;
@@ -30,7 +30,7 @@ public class LogisticControllerBlockEntity extends BlockEntity {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public LogisticControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+    public CLControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 

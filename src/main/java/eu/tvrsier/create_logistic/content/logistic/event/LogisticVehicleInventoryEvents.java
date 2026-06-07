@@ -5,8 +5,6 @@ import dev.ryanhcode.sable.Sable;
 import dev.ryanhcode.sable.sublevel.ServerSubLevel;
 import dev.ryanhcode.sable.sublevel.SubLevel;
 import eu.tvrsier.create_logistic.CreateLogistic;
-import eu.tvrsier.create_logistic.content.block.logistic_docking_connector.LogisticDockingConnectorBlock;
-import eu.tvrsier.create_logistic.content.block.logistic_docking_connector.LogisticDockingConnectorBlockEntity;
 import eu.tvrsier.create_logistic.content.logistic.vehicle.LogisticVehicleContext;
 import eu.tvrsier.create_logistic.content.logistic.vehicle.LogisticVehicleRegistry;
 import net.minecraft.core.BlockPos;
@@ -54,8 +52,8 @@ public final class LogisticVehicleInventoryEvents {
         resolve(event).ifPresent(context -> {
             var state = context.level().getBlockState(context.pos());
 
-            if (state.getBlock() instanceof LogisticDockingConnectorBlock block) {
-                LogisticDockingConnectorBlockEntity be = block.getBlockEntity(context.level(), context.pos());
+           /* if (state.getBlock() instanceof CLDockingConnectorBlock block) {
+                CLDockingConnectorBlockEntity be = block.getBlockEntity(context.level(), context.pos());
 
                 if (be == null) {
                     LOGGER.warn(
@@ -65,14 +63,14 @@ public final class LogisticVehicleInventoryEvents {
                     return;
                 }
 
-                be.setVehicleContext(context.vehicle());
+                be.inventoryBridge().setVehicleContext(context.vehicle());
                 LOGGER.info(
                         "Linked Logistic Docking Connector at {} to vehicle {}",
                         context.pos(),
                         context.vehicle().vehicleId()
                 );
                 return;
-            }
+            }*/
 
             IItemHandler handler = context.level().getCapability(
                     Capabilities.ItemHandler.BLOCK,
@@ -99,13 +97,14 @@ public final class LogisticVehicleInventoryEvents {
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
         resolve(event).ifPresent(context -> {
             var state = context.level().getBlockState(context.pos());
-
-            if (state.getBlock() instanceof LogisticDockingConnectorBlock block) {
-                LogisticDockingConnectorBlockEntity be = block.getBlockEntity(context.level(), context.pos());
+            /*
+            if (state.getBlock() instanceof CLDockingConnectorBlock block) {
+                CLDockingConnectorBlockEntity be = block.getBlockEntity(context.level(), context.pos());
 
                 if (be != null) {
-                    be.clearVehicleContext(context.vehicle());
+                    be.inventoryBridge().clearVehicleContext(context.vehicle());
                 }
+
 
                 LOGGER.info(
                         "Unlinked Logistic Docking Connector at {} from vehicle {}",
@@ -113,7 +112,7 @@ public final class LogisticVehicleInventoryEvents {
                         context.vehicle().vehicleId()
                 );
                 return;
-            }
+            }*/
 
             boolean removed = context.vehicle().inventoryState().remove(context.pos());
 

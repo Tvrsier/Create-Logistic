@@ -3,8 +3,11 @@ package eu.tvrsier.create_logistic;
 import com.mojang.logging.LogUtils;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import dev.ryanhcode.sable.api.block.BlockSubLevelAssemblyListener;
+import dev.ryanhcode.sable.platform.SableEventPlatform;
 import eu.tvrsier.create_logistic.client.CreateLogisticClient;
 import eu.tvrsier.create_logistic.command.CreateLogisticCommands;
+import eu.tvrsier.create_logistic.content.logistic.event.CLCommonEvents;
+import eu.tvrsier.create_logistic.content.logistic.event.CLNeoForgeCommonEvents;
 import eu.tvrsier.create_logistic.index.CLBlockEntityTypes;
 import eu.tvrsier.create_logistic.index.CLBlocks;
 import eu.tvrsier.create_logistic.index.CLItems;
@@ -77,6 +80,9 @@ import org.slf4j.Logger;
         CREATIVE_MODE_TABS.register(modEventBus);
 
         NeoForge.EVENT_BUS.register(this);
+        NeoForge.EVENT_BUS.register(CLNeoForgeCommonEvents.class);
+
+        SableEventPlatform.INSTANCE.onPhysicsTick(CLCommonEvents::onPhysicsTick);
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 

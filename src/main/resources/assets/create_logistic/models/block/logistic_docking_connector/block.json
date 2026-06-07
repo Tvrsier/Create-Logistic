@@ -7,7 +7,7 @@
 		"2": "create_logistic:block/logistic_docking_connector/signal_modules",
 		"particle": "create:block/brass_casing"
 	},
-  "render_type": "minecraft:cutout",
+  "render_type": "minecraft:cutout_mipped",
 	"elements": [
 		{
 			"name": "casing",
